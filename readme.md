@@ -68,4 +68,9 @@ By the end of it, you should be able to make music using modern, production
 haskell build tools. It doens't cover any actual theory, it's just about making
 the tech fit together.
 
-### ch1: (coming up next)
+### ch1: getting started
+
+There's not much here because Chapter 1 is mostly an overview of Haskell
+syntax / intro to programming concepts. I did work through a few small
+examples in `src/Lib.hs`, and added some notes in the README about how to
+use ghci to play with the examples.

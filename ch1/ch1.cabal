@@ -1,0 +1,65 @@
+-- This file has been generated from package.yaml by hpack version 0.20.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: efe09f35f43fd4274c6159f49c7d99aa24b5c544a75c1a25d581f462d634326b
+
+name:           ch1
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/githubuser/ch1#readme>
+homepage:       https://github.com/githubuser/ch1#readme
+bug-reports:    https://github.com/githubuser/ch1/issues
+author:         Author name here
+maintainer:     example@example.com
+copyright:      2018 Author name here
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+cabal-version:  >= 1.10
+
+extra-source-files:
+    ChangeLog.md
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/githubuser/ch1
+
+library
+  hs-source-dirs:
+      src
+  build-depends:
+      Euterpea
+    , base >=4.7 && <5
+  exposed-modules:
+      Lib
+  other-modules:
+      Paths_ch1
+  default-language: Haskell2010
+
+executable ch1-exe
+  main-is: Main.hs
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      Euterpea
+    , base >=4.7 && <5
+    , ch1
+  other-modules:
+      Paths_ch1
+  default-language: Haskell2010
+
+test-suite ch1-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      Euterpea
+    , base >=4.7 && <5
+    , ch1
+  other-modules:
+      Paths_ch1
+  default-language: Haskell2010
