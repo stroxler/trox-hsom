@@ -1,55 +1,74 @@
+{-# LANGUAGE NamedFieldPuns #-}
 module Lib
-    ( someFunc
+    ( Command (PlayNote, PlayLick)
+    , executeCommand
     ) where
 
 import Euterpea
-
--- type Octave = Int
--- type Pitch = (PitchClass, Octave)
---
--- note :: Dur -> a -> Music a
--- rest :: Dur -> Music a
---
--- (:+:) :: Music a -> Music a -> Music a   -- sequence
--- (:=:) :: Music a -> Music a -> Music a   -- parallel
--- trans :: Int -> Pitch -> Pitch           -- translate n semitones
---
--- C :: PitchClass
--- c :: Octave -> Dur -> Music Pitch
---
-
-concertA, a440 :: (PitchClass, Octave)
-concertA = (A, 4)
-a440 = (A, 4)
-
-harmonize :: Dur -> Pitch -> Int -> Music Pitch
-harmonize d p offset = (note d p) :=: (note d (trans offset p))
-
-minor3rdMelody :: Pitch -> Pitch -> Pitch -> Music Pitch
-minor3rdMelody p1 p2 p3 =
-  (h p1) :+: (h p2) :+: (h p3)
-    where h p = (harmonize qn p (-3))
-
-playExampleMinor3rdMelody :: IO ()
-playExampleMinor3rdMelody = play $ minor3rdMelody (C, 4) (D, 4) (Ef, 4)
+import System.Exit (exitWith, ExitCode (ExitFailure))
 
 
-pitchList2Run :: Dur -> [Pitch] -> Music Pitch
-pitchList2Run _ [] = rest 0
-pitchList2Run d (p:ps) = (note d p) :+: (pitchList2Run d ps)
+data Command =
+    PlayNote { noteName :: String
+             , octave :: Int }
+  | PlayLick { extended :: Bool }
+  deriving (Show)
 
-exampleRun :: Music Pitch
-exampleRun = pitchList2Run en [(C, 4), (D, 4), (Bf, 3), (B, 3), (C, 4)]
+type Note = Octave -> Dur -> Music Pitch
+
+executeCommand :: Command -> IO ()
+executeCommand (PlayNote { noteName, octave}) =
+  let
+    noteOrErr = do
+      noteClass <- stringToNote noteName
+      return $ noteClass octave qn
+  in
+    case noteOrErr of
+      (Left oops) -> do
+        putStrLn $ oops
+        exitWith $ ExitFailure 1
+      (Right theNote) ->
+        play $ theNote
+executeCommand (PlayLick { extended }) =
+  play $ bluesLick extended
 
 
--- Haskell numeric types
--- Int : fixed-width integer
--- Integer : arbirary-precision integer
--- Rational : arbitrary-precision rational
--- Float : single-word floating point
--- Double : double-word floating point
--- Complex : complex; probably implemented in terms of Double but HSoM does not say
+bluesLick :: Bool -> Music Pitch
+bluesLick False =
+  (c 4 qn) :+: (df 4 en) :+: (d 4 en) :+: (f 4 en) :+: (fs 4 en) :+:
+  (g 4 en) :+: ((c 4 qn) :=: (e 4 qn) :=: (bf 4 qn))
+bluesLick True =
+  let repeated = ((g 4 en) :=: (bf 4 en))
+   in
+    ((c 4 qn) :=: ((ef 4 en) :+: (e 4 en))) :+: ((d 4 en) :=: (f 4 en)) :+:
+    repeated :+: repeated :+: repeated :+:
+    repeated :+: repeated :+: repeated :+:
+    repeated :+: repeated :+: ((f 4 en) :=: (a 4 en)) :+:
+    ((e 4 qn) :=: (g 4 qn))
 
 
-someFunc :: IO ()
-someFunc = putStrLn $ show a440
+
+stringToNote :: String -> Either String  Note
+stringToNote stringNote = case stringNote of
+  "af" -> Right af
+  "a"  -> Right a
+  "as" -> Right as
+  "bf" -> Right bf
+  "b"  -> Right b
+  "bs" -> Right bs
+  "cf" -> Right cf
+  "c"  -> Right c
+  "cs" -> Right cs
+  "df" -> Right df
+  "d"  -> Right d
+  "ds" -> Right ds
+  "ef" -> Right ef
+  "e"  -> Right e
+  "es" -> Right es
+  "ff" -> Right ff
+  "f"  -> Right f
+  "fs" -> Right fs
+  "gf" -> Right gf
+  "g"  -> Right g
+  "gs" -> Right gs
+  _ -> Left $ "Did not understand the note " ++ show stringNote
