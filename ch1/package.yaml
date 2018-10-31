@@ -7,7 +7,7 @@ maintainer:          "example@example.com"
 copyright:           "2018 Author name here"
 
 extra-source-files:
-- README.md
+- readme.md
 - ChangeLog.md
 
 # Metadata used when publishing your package
@@ -16,8 +16,8 @@ extra-source-files:
 
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
-# common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/githubuser/ch1#readme>
+# common to point users to the readme.md file.
+description:         Please see the readme on GitHub at <https://github.com/githubuser/ch1#readme>
 
 dependencies:
 - base >= 4.7 && < 5
@@ -48,3 +48,4 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - ch1
+    - hspec

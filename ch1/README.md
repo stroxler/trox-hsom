@@ -152,3 +152,11 @@ stack exec ch1-exe -- note -o 5  # note defaults to c, and -o is short
 stack exec ch1-exe -- lick              # play the short lick
 stack exec ch1-exe -- lick --extended   # play the long lick
 ```
+
+## Exercises and tests
+
+For the Chapter 1 exercises, I wrote Hspec tests in
+`test/Spec.hs`. To run tests in a cycle, execute
+```
+stack test --fast --file-watch
+```
