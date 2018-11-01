@@ -1,14 +1,15 @@
+module Ch2Spec ( run ) where
+
 import Ch2
 
-import GHC.Real
 import Test.Hspec
 
 import EuterpeaExports
 import qualified Euterpea as E
 
 
-main :: IO ()
-main = hspec $ do
+run :: IO ()
+run = hspec $ do
   describe "twoFiveOne" $
     let
       c = E.c; d = E.d; e = E.e; f = E.f

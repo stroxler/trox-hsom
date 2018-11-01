@@ -1,4 +1,4 @@
-name:                ch2
+name:                ch2-ch3
 version:             0.1.0.0
 github:              "githubuser/ch2"
 license:             BSD3
@@ -27,7 +27,7 @@ library:
   source-dirs: src
 
 tests:
-  ch2-test:
+  ch2-ch3-test:
     main:                Spec.hs
     source-dirs:         test
     ghc-options:
@@ -35,5 +35,5 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - ch2
+    - ch2-ch3
     - hspec

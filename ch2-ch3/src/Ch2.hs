@@ -51,12 +51,33 @@ fromMajorBlues root (mb, o) =
     MbSo -> tr 7; MbLa -> tr 9;
 
 
+-- Note the implication here that Music has a monadic-type structure
+-- (but without the parametric type) over Primitive: we can flat map
+-- Primitives into Musics.
+--
+-- It would be *possible* to make a full monad by replacing
+-- the Music a <-> Primitive a relationship with a Music prim <-> prim
+-- relationship. It probably wouldn't be super useful though, since
+-- flatMapMusicPrims seems to give everything I can imagine wanting.
+--
+-- The only benefit would be `do` notation, but I don't think that
+-- would be helpful in most cases.
+flatMapMusicPrims :: (Primitive a -> Music b) -> Music a -> Music b
+flatMapMusicPrims f (Prim x) = f x
+flatMapMusicPrims f (m0 :+: m1) = (flatMapMusicPrims f m0) :+: (flatMapMusicPrims f m1)
+flatMapMusicPrims f (m0 :=: m1) = (flatMapMusicPrims f m0) :=: (flatMapMusicPrims f m1)
+flatMapMusicPrims f (Modify c m) = Modify c $ flatMapMusicPrims f m
+
+mapMusicPrims :: (Primitive a -> Primitive b) -> Music a -> Music b
+mapMusicPrims f = flatMapMusicPrims (Prim . f)
+
+mapPrimitive :: (a -> b) -> Primitive a -> Primitive b
+mapPrimitive _ (Rest d) = Rest d   -- Note: Haskell won't let us reuse the Rest :(
+mapPrimitive f (Note d p) = Note d (f p)
+
 mapMusic :: (a -> b) -> Music a -> Music b
-mapMusic f (Prim (Note d aa)) = Prim (Note d $ f aa)
-mapMusic f (Prim (Rest d)) = Prim (Rest d)
-mapMusic f (m0 :+: m1) = (mapMusic f m0) :+: (mapMusic f m1)
-mapMusic f (m0 :=: m1) = (mapMusic f m0) :=: (mapMusic f m1)
-mapMusic f (Modify c m) = Modify c $ mapMusic f m
+mapMusic f = mapMusicPrims (mapPrimitive f)
+
 
 fromMajorBluesM :: PitchClass -> Music MajorBluesPitch -> Music Pitch
 fromMajorBluesM root = mapMusic (fromMajorBlues root)

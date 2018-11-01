@@ -1,0 +1,57 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 713782ad4e559a2efc92ee4efc335199a24cbc40b2090b492d2e9cfab5a85b56
+
+name:           ch2-ch3
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/githubuser/ch2#readme>
+homepage:       https://github.com/githubuser/ch2#readme
+bug-reports:    https://github.com/githubuser/ch2/issues
+author:         Author name here
+maintainer:     example@example.com
+copyright:      2018 Author name here
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/githubuser/ch2
+
+library
+  exposed-modules:
+      Ch2
+      Ch3
+      EuterpeaExports
+  other-modules:
+      Paths_ch2_ch3
+  hs-source-dirs:
+      src
+  build-depends:
+      Euterpea
+    , base >=4.7 && <5
+  default-language: Haskell2010
+
+test-suite ch2-ch3-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Ch2Spec
+      Ch3Spec
+      Paths_ch2_ch3
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      Euterpea
+    , base >=4.7 && <5
+    , ch2-ch3
+    , hspec
+  default-language: Haskell2010
