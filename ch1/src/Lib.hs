@@ -1,4 +1,5 @@
-{-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE RecordWildCards #-} -- allows RecordType {..}
+{-# LANGUAGE NamedFieldPuns #-}  -- allows RecordType { fieldname }
 module Lib
     ( Command (PlayNote, PlayLick)
     , executeCommand
@@ -19,7 +20,7 @@ data Command =
 type Note = Octave -> Dur -> Music Pitch
 
 executeCommand :: Command -> IO ()
-executeCommand (PlayNote { noteName, octave}) =
+executeCommand (PlayNote {..}) =
   let
     noteOrErr = do
       noteClass <- stringToNote noteName
